@@ -10,7 +10,7 @@ ARCH=aarch64
 FIRECRACKER_VERSION=v1.13.1
 DONWLOAD_FILE=
 
-wget -qO- https://github.com/firecracker-microvm/firecracker/releases/download/$FIRECRACKER_VERSION/firecracker-${FIRECRACKER_VERSION}-${ARCH}.tgz | tar zxv
+curl -s -L https://github.com/firecracker-microvm/firecracker/releases/download/$FIRECRACKER_VERSION/firecracker-${FIRECRACKER_VERSION}-${ARCH}.tgz | tar zxv
 
 mkdir -p ./temp
 mv "release-${FIRECRACKER_VERSION}-${ARCH}" "./temp/${DONWLOAD_FILE}"
