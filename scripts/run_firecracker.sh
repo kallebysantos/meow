@@ -10,4 +10,4 @@ API_SOCKET="/tmp/firecracker.socket"
 
 sudo rm -f $API_SOCKET
 
-sudo ./temp/release-v1.13.1-aarch64/firecracker-v1.13.1-aarch64 --api-sock "${API_SOCKET}" --enable-pci
+sudo ./temp/release-v1.13.1-x86_64/firecracker-v1.13.1-x86_64 --api-sock "${API_SOCKET}" --enable-pci

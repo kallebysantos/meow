@@ -6,7 +6,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 export $(grep -v '^#' $SCRIPTPATH/../.env | xargs)
 
-ARCH=aarch64
+ARCH=x86_64
 FIRECRACKER_VERSION=v1.13.1
 DONWLOAD_FILE=
 
