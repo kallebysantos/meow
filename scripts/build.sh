@@ -6,10 +6,10 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 
 export $(grep -v '^#' $SCRIPTPATH/../.env | xargs)
 
-docker run -it --rm --cap-add=SYS_ADMIN --privileged \
+docker run -i --rm --cap-add=SYS_ADMIN --privileged \
   -v $(pwd)/build:/build/out \
   -v $(pwd)/scripts:/build/scripts \
-  node /build/scripts/create.sh
+  node /bin/sh <scripts/create.sh
 
 exit
 
