@@ -1,0 +1,6 @@
+# runs on alpine
+
+echo "Installing Python"
+
+apk update
+apk add python3
