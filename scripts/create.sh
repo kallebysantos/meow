@@ -6,6 +6,8 @@
 # apk update
 # apk add e2fsprogs sudo
 
+INSTALLER=$1
+
 apt update -y
 apt install -y sudo wget
 
@@ -17,8 +19,7 @@ sudo ./alpine-make-rootfs \
   --branch v3.8 \
   --packages 'openrc util-linux' \
   --script-chroot \
-  rootfs.tar.gz - <<'SHELL'
-    mkdir -p /etc
+  rootfs.tar.gz - <<SHELL
     ln -s agetty /etc/init.d/agetty.ttyS0
     echo ttyS0 > /etc/securetty
     echo 'nameserver 1.1.1.1' > /etc/resolv.conf
@@ -26,6 +27,8 @@ sudo ./alpine-make-rootfs \
     rc-update add devfs boot
     rc-update add procfs boot
     rc-update add sysfs boot
+
+    ${INSTALLER}
 SHELL
 
 dd if=/dev/zero of=alpine.ext4 bs=1 count=1 seek=256M

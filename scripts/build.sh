@@ -9,7 +9,6 @@ export $(grep -v '^#' $SCRIPTPATH/../.env | xargs)
 docker run -i --rm --cap-add=SYS_ADMIN --privileged \
   -v $(pwd)/build:/build/out \
   -v $(pwd)/scripts:/build/scripts \
-  node /bin/sh <scripts/create.sh
+  node /bin/sh -s "$(cat environments/$1.sh)" <scripts/create.sh
 
 exit
-
