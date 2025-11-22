@@ -1,23 +1,16 @@
 #!/bin/sh
 
 #curl -fsSL -o hello-vmlinux.bin https://s3.amazonaws.com/spec.ccfc.min/img/hello/kernel/hello-vmlinux.bin
-# curl -fsSL -o hello-rootfs.ext4 https://s3.amazonaws.com/spec.ccfc.min/img/hello/fsfiles/hello-rootfs.ext4
-
-# apk update
-# apk add e2fsprogs sudo
+#curl -fsSL -o hello-rootfs.ext4 https://s3.amazonaws.com/spec.ccfc.min/img/hello/fsfiles/hello-rootfs.ext4
 
 INSTALLER=$1
 
-apt update -y
-apt install -y sudo wget
-
-wget https://raw.githubusercontent.com/alpinelinux/alpine-make-rootfs/v0.5.1/alpine-make-rootfs -O alpine-make-rootfs
-
-sudo chmod +x ./alpine-make-rootfs
+cp -R /builder/workdir .workdir
+rm .workdir/Meowfile
 
 sudo ./alpine-make-rootfs \
-  --branch v3.8 \
-  --packages 'openrc util-linux' \
+  --branch 'latest-stable' \
+  --packages 'openrc util-linux rsync' \
   --script-chroot \
   rootfs.tar.gz - <<SHELL
     ln -s agetty /etc/init.d/agetty.ttyS0
@@ -27,11 +20,12 @@ sudo ./alpine-make-rootfs \
     rc-update add devfs boot
     rc-update add procfs boot
     rc-update add sysfs boot
-
+    
+    cd .workdir
     ${INSTALLER}
 SHELL
 
-dd if=/dev/zero of=alpine.ext4 bs=1 count=1 seek=256M
+dd if=/dev/zero of=alpine.ext4 bs=1 count=1 seek=500M
 
 sudo mkfs.ext4 alpine.ext4
 sudo mkdir /tmp/alpine-rootfs
@@ -41,4 +35,4 @@ sudo tar xzvf rootfs.tar.gz -C /tmp/alpine-rootfs
 
 sudo umount /tmp/alpine-rootfs
 
-sudo cp alpine.ext4 /build/out/alpine.ext4
+sudo cp alpine.ext4 /builder/out/alpine.ext4

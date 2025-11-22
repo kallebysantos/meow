@@ -4,3 +4,6 @@ echo "Installing Python"
 
 apk update
 apk add python3
+
+mkdir /app
+cp -R ./* /app
