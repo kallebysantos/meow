@@ -10,7 +10,7 @@ rm .workdir/Meowfile
 
 sudo ./alpine-make-rootfs \
   --branch 'latest-stable' \
-  --packages 'openrc util-linux rsync' \
+  --packages 'openrc util-linux rng-tools' \
   --script-chroot \
   rootfs.tar.gz - <<SHELL
     ln -s agetty /etc/init.d/agetty.ttyS0
@@ -20,10 +20,12 @@ sudo ./alpine-make-rootfs \
     rc-update add devfs boot
     rc-update add procfs boot
     rc-update add sysfs boot
+    rc-update add rngd default
     
     cd .workdir
     ${INSTALLER}
 SHELL
+
 
 dd if=/dev/zero of=alpine.ext4 bs=1 count=1 seek=500M
 

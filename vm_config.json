@@ -1,6 +1,6 @@
 {
   "boot-source": {
-    "kernel_image_path": "temp/vm/vmlinux.bin",
+    "kernel_image_path": "temp/vm/kernel/4.14-vmlinux.bin",
     "boot_args": "console=ttyS0 reboot=k panic=1",
     "initrd_path": null
   },
@@ -11,7 +11,7 @@
       "is_root_device": true,
       "cache_type": "Unsafe",
       "is_read_only": false,
-      "path_on_host": "temp/vm/ubuntu.rootfs.ext4",
+      "path_on_host": "build/alpine.ext4",
       "io_engine": "Sync",
       "rate_limiter": null,
       "socket": null
