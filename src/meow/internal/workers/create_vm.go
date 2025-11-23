@@ -41,14 +41,21 @@ func CreateVM() error {
 			VcpuCount:  firecracker.Int64(1),
 			MemSizeMib: firecracker.Int64(256),
 		},
-		/*
-			NetworkInterfaces: firecracker.NetworkInterfaces{{
-					CNIConfiguration: &firecracker.CNIConfiguration{
-						NetworkName: "fc-88-tap0",
-						IfName:      "eth0",
-					},
-			}},
-		*/
+		NetworkInterfaces: firecracker.NetworkInterfaces{{
+			StaticConfiguration: &firecracker.StaticNetworkConfiguration{
+				MacAddress:  "02:FC:00:00:00:05",
+				HostDevName: "fc-88-tap0",
+				IPConfiguration: &firecracker.IPConfiguration{
+					IfName: "eth0",
+				},
+			},
+			/*
+				CNIConfiguration: &firecracker.CNIConfiguration{
+					NetworkName: "fc-88-tap0",
+					IfName:      "eth0",
+				},
+			*/
+		}},
 	}
 
 	cmd := firecracker.VMCommandBuilder{}.
