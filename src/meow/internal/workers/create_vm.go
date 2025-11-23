@@ -3,6 +3,7 @@ package workers
 import (
 	"context"
 	"fmt"
+	"net"
 	"os"
 	"path"
 
@@ -30,7 +31,7 @@ func CreateVM() error {
 	config := firecracker.Config{
 		SocketPath:      socketPath,
 		KernelImagePath: kernelPath,
-		KernelArgs:      "console=ttyS0 reboot=k panic=1 pci=off nomodules random.trust_cpu=on ip=169.254.0.21::169.254.0.22:255.255.255.252::eth0:off",
+		KernelArgs:      "console=ttyS0 reboot=k panic=1 pci=off nomodules random.trust_cpu=on ",
 		Drives: []models.Drive{{
 			DriveID:      firecracker.String("rootfs"),
 			PathOnHost:   firecracker.String(rootFsPath),
@@ -45,8 +46,17 @@ func CreateVM() error {
 			StaticConfiguration: &firecracker.StaticNetworkConfiguration{
 				MacAddress:  "02:FC:00:00:00:05",
 				HostDevName: "fc-88-tap0",
+				// ip=169.254.0.21::
+				// 169.254.0.22:
+				// 255.255.255.252::
+				// eth0:off
 				IPConfiguration: &firecracker.IPConfiguration{
-					IfName: "eth0",
+					IfName: "eth0:off",
+					IPAddr: net.IPNet{
+						IP:   net.IPv4(169, 254, 0, 21),
+						Mask: net.IPv4Mask(255, 255, 255, 252),
+					},
+					Gateway: net.IPv4(169, 254, 0, 22),
 				},
 			},
 			/*
