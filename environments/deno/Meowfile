@@ -6,22 +6,13 @@ adduser -D -H -s /bin/ash deno
 # Copy project
 mkdir /app
 cp -R ./* /app
-chwon -R deno:deno /app
+chown -R deno:deno /app
 
 # Install deno
 apk update 
 apk add deno
 
 # Add OpenRC service
-cat <<'EOF' > /etc/init.d/deno-app
-#!/sbin/openrc-run
-command="/home/deno/.deno/bin/deno"
-command_args="serve /app/index.ts"
-command_user="deno"
-pidfile="/var/run/deno-app.pid"
-depend() { after networking }
-start_pre() { mkdir -p /var/run/deno-app }
-EOF
-
-chmod +x /etc/init.d/deno-app
-rc-update add deno-app default
+cp meow-entrypoint.sh /etc/init.d/deno-server
+chmod +x /etc/init.d/deno-server
+rc-update add deno-server default
