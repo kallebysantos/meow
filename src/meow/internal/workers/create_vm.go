@@ -12,6 +12,7 @@ import (
 )
 
 func CreateVM() error {
+	id := 3
 	ctx := context.Background()
 	cwd, err := os.Getwd()
 	if err != nil {
@@ -24,7 +25,10 @@ func CreateVM() error {
 		return fmt.Errorf("Failed to create temp rootfs: %v", err)
 	}
 
+	socketPath := fmt.Sprintf("/tmp/firecracker-%d.sock", id)
+
 	config := firecracker.Config{
+		SocketPath:      socketPath,
 		KernelImagePath: kernelPath,
 		KernelArgs:      "console=ttyS0 reboot=k panic=1 pci=off nomodules random.trust_cpu=on ip=169.254.0.21::169.254.0.22:255.255.255.252::eth0:off",
 		Drives: []models.Drive{{
@@ -49,6 +53,7 @@ func CreateVM() error {
 
 	cmd := firecracker.VMCommandBuilder{}.
 		WithBin(path.Join(cwd, "temp/release-v1.13.1-x86_64/firecracker-v1.13.1-x86_64")).
+		WithSocketPath(socketPath).
 		WithStdin(os.Stdin).
 		WithStdout(os.Stdout).
 		WithStderr(os.Stderr).
