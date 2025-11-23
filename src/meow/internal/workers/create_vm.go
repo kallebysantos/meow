@@ -47,7 +47,16 @@ func CreateVM() error {
 		*/
 	}
 
-	machineOpts := []firecracker.Opt{}
+	cmd := firecracker.VMCommandBuilder{}.
+		WithBin(path.Join(cwd, "temp/release-v1.13.1-x86_64/firecracker-v1.13.1-x86_64")).
+		WithStdin(os.Stdin).
+		WithStdout(os.Stdout).
+		WithStderr(os.Stderr).
+		Build(ctx)
+
+	machineOpts := []firecracker.Opt{
+		firecracker.WithProcessRunner(cmd),
+	}
 
 	utils.Print(config)
 	vm, err := firecracker.NewMachine(ctx, config, machineOpts...)
